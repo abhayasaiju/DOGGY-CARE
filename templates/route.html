@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Suggestions</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Safe & Danger Zones</h2>
+        <div id="map"></div>
+        <button onclick="location.href='/report'">Report a Dog Sighting</button>
+    </div>
+    <script>
+        function initMap() {
+            let map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 10.8505, lng: 76.2711 },
+                zoom: 10
+            });
+    
+            // Fetch Danger Zones from Backend
+            fetch("/get_zones")
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(zone => {
+                    new google.maps.Marker({
+                        position: { lat: zone[2], lng: zone[3] },
+                        map: map,
+                        title: zone[1]
+                    });
+                });
+            });
+        }
+    </script>
+    
+</body>
+</html>
